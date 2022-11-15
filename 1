@@ -1,0 +1,88 @@
+https://github.com/SuFaVi/ejercicios-r/new/main
+## Sesion 1-2 R -- 24/10/2022
+
+## 1. C?lculos b?sicos
+
+### 1.1 Suma
+1+1
+
+### 1.2 Calcular el 15% de $1.900
+0.15*1900
+
+### 2. Instalar estos Paquetes 
+install.packages("tidyverse")
+install.packages("dplyr")
+install.packages("plyr")
+install.packages("tidyr")
+install.packages("mlogit")
+install.packages("stargazer")
+install.packages("rsq")
+install.packages("sjPlot")
+install.packages("dslabs")
+
+### 2.1 Cargar desde la biblioteca estos Paquetes
+library(tidyverse)
+library(dplyr)
+library(plyr)
+library(tidyr)
+library(mlogit)
+library(stargazer)
+library(rsq)
+library(sjPlot)
+library(dslabs)
+
+## 2. Encuesta CEP
+### 2.1 Link: https://www.cepchile.cl/cep/encuestas-cep/encuestas-2010-2021/estudio-nacional-de-opinion-publica-n-86-abril-mayo-de-2022
+library(readxl)
+
+base_86 <- read_excel("C:/Users/isama/Dropbox/Posgrados/Mag?ster en Ciencias Sociales menci?n sociedad civil/Ayudant?a Cuanti/encuesta_cep_abr-may2022/base_86.csv")
+View(base_86)
+
+### 2.2 Importar base de datos
+library(haven)
+base_86 <- read_sav("~/R/R_Projects/Curso-IDEA-2021/encuesta_cep_ago2021/base_85.sav")
+View(base_86)
+
+# 2.3Variable num?rica
+base_86[sapply(base_86, is.numeric)] <- lapply(base_86[sapply(base_86, is.numeric)], as.factor)
+
+## 3. An?lisis descriptivo
+
+### 3.1 Frecuencias
+
+### Variable Inicial: elec_pres_1
+
+table(base_86$sexo)
+table(base_86$elec_pres_143_a)
+table(base_86$religion_82)
+
+### Variable dependiente: elec_pres_1 en porcentaje 
+table(base_86$elec_pres_143_a)
+table_1 <- table(base_86$elec_pres_143_a)
+prop.table(table_1)
+
+### Ejemplo tablas de contingencia: elec_pres_1 y sexo
+sjt.xtab(base_86$elec_pres_143_a,
+         base_86$sexo, #columnas
+         file = "1.doc")
+
+sjt.xtab(base_86$elec_pres_143_a, base_86$sexo)
+
+### Crear gráficos para la representación de variables
+
+### Gráficos de barra
+
+plot(x = base_86$elec_pres_143_a)
+
+### Gráficos de barra con colores y etiquetas
+
+plot(x = base_86$elec_pres_143_a, main = "Votación candidato presidencial primera vuelta 2021",
+     xlab = "Candidato", ylab = "Frecuencia", 
+     col = c("royalblue", "seagreen", "purple", "#8B008B", "aquamarine", "azure", "bisque", "brown"))
+
+## 4. Test de Correlaci?n. Ejemplo
+table(base_85$bienestar_2)
+
+sjt.xtab(base_85$bienestar_2, base_85$sexo, file = "4.doc")
+
+cor.test(base_85$sexo, base_85$bienestar_2)
